@@ -1,0 +1,65 @@
+<?php
+$title = 'Zmiana danych użytkownika';
+
+$this->headTitle($title);
+?>
+<div>
+    <span class="glyphicon glyphicon-user" style="font-size:1.5em;">
+        &nbsp<?php echo $this->escapeHtml($title); ?>:&nbsp</span>  
+    <div>&nbsp</div>
+</div>
+<?php
+$form = $this->form;
+$form->setAttribute('class', 'form-vertical');
+$form->setAttribute('action', $this->url('uzytkownik', array('action' => 'edit', 'id' => $this->id)));
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo $this->formHidden($form->get('id'));
+?>
+<div class="row">
+<div class="form-group col-md-6 col-sm-6 col-xs-12">
+    <?php
+    echo $this->formlabel($form->get('imie'));
+    echo $this->formElement($form->get('imie'));
+    echo $this->formElementErrors($form->get('imie'));
+    ?>
+</div>
+<div class="form-group col-md-6 col-sm-6 col-xs-12">
+    <?php
+    echo $this->formlabel($form->get('nazwisko'));
+    echo $this->formElement($form->get('nazwisko'));
+    echo $this->formElementErrors($form->get('nazwisko'));
+    ?>
+</div>
+    </div>
+<div class="row">
+<div class="form-group col-md-6 col-sm-6 col-xs-12">
+    <?php
+    echo $this->formlabel($form->get('mail'));
+    echo $this->formElement($form->get('mail'));
+    echo $this->formElementErrors($form->get('mail'));
+    ?>
+</div>
+<div class="form-group col-md-6 col-sm-6 col-xs-12">
+    <?php
+    echo $this->formlabel($form->get('kom'));
+    echo $this->formElement($form->get('kom'));
+    echo $this->formElementErrors($form->get('kom'));
+    ?>
+</div></div>
+<div class="row">
+<div class="form-group col-md-6 col-sm-6 col-xs-12">
+    <?php
+    echo $this->formlabel($form->get('dzial_id'));
+    echo $this->formElement($form->get('dzial_id'));
+    ?>
+</div></div>
+
+<div class="form-group">
+    <?php
+    echo $this->formInput($form->get('submit'));
+    echo '   <a class="btn btn-danger" href="javascript:history.back();">Wstecz</a>';
+    echo $this->form()->closeTag($form);
+    ?>
+</div>

@@ -1,0 +1,82 @@
+<h1>Dane szczegółowe:</h1>
+<div class="row">
+    <div class='panel panel-default col-md-5 '>
+        <div class='panel-body'>
+            <table class='table table-hover'>
+                <tr><th>Marka</th><td>
+                        <?php echo $komputer->marka; ?>
+                    </td></tr>
+                <tr><th>Model</th><td>
+                        <?php echo $komputer->model; ?>
+                    </td</tr>
+                <tr><th>Nr seryjny</th><td>
+                        <?php echo $komputer->sn; ?>
+                    </td></tr>
+                <tr><th>Faktura:</th><td>
+                    <?php
+                    echo '<a href="';
+                    echo "/Zend/dane/" . str_replace('/', '', $komputer->nr_inwent) . "/fv/" . $komputer->fv;
+                    echo '">';
+                    echo $this->escapeHtml($komputer->fv);
+                    echo '</a>';
+                    ?>
+                </td></tr>
+                <tr><th>Gwarancja</th><td>
+                    <?php
+                    echo '<a href="';
+                    echo "/Zend/dane/" . str_replace('/', '', $komputer->nr_inwent) . "/gv/" . $komputer->gw;
+                    echo '">';
+                    echo $this->escapeHtml($komputer->gw);
+                    echo '</a>';
+                    ?>
+                </td></tr>
+            </table>
+        </div>
+
+    </div>
+    <div class='panel panel-info col-md-5 col-md-offset-1'>
+        <div class='panel-body'>
+            <table class='table table-hover'>
+                <tr><th>Użytkownik</th><td>
+<?php echo $komputer->imie . " " . $komputer->nazwisko; ?>
+                    </td></tr>
+                <tr><th>Dział</th><td>
+<?php echo $komputer->dzial; ?>
+                    </td</tr>
+                <tr><th>Nr ewidencyjny</th><td>
+<?php echo $komputer->nr_ewid; ?>
+                    </td></tr>
+                <tr><th>Nr inwentarzowy</th><td>
+<?php echo $komputer->nr_inwent; ?>
+                    </td></tr>
+                <tr><th>Data zakupu</th><td>
+<?php echo $komputer->data_zakupu; ?>
+                    </td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+<div class='panel panel-default collapse'>
+    <div class='panel-body'>
+        <table class='table table-hover'><thead class='thead-inverse'>
+            <th>Marka</th><th>Model</th><th>Nr seryjny</th><th>Data zakupu</th></thead>
+            <tbody>
+
+                <tr><td>
+                        <?php echo $komputer->marka; ?>
+                    </td><td>
+                        <?php echo $komputer->model; ?>
+                    </td><td>
+                        <?php echo $komputer->sn; ?>
+                    </td><td>
+<?php echo $komputer->data_zakupu; ?>
+                    </td></tr>
+
+            </tbody></table>
+    </div></div>
+
+<form>
+    <div class="form-group">
+        <a class="btn btn-danger" href="javascript:history.back();">Wstecz</a>
+    </div>
+</form>

@@ -1,0 +1,25 @@
+<?php
+$title = 'Kasowanie komputera';
+$this->headTitle($title);
+?>
+<div>
+    <span class="glyphicon glyphicon-hdd" style="font-size:2em;">
+        &nbsp<?php echo $this->escapeHtml($title); ?>:&nbsp</span>  
+    <div>&nbsp</div>
+</div>
+
+<p>Czy napewno chcesz usunąć komputer? <br />
+  <?php echo $this->escapeHtml($komputer->marka)." "; ?>
+  <?php echo $this->escapeHtml($komputer->model); ?>
+    <br />o numerze ewidencyjnym: 
+  <?php echo $this->escapeHtml($komputer->nr_ewid); ?>
+</p>
+<?php 
+$url = $this->url('komputer', array('action' => 'delete', 'id'=>$this->id)); ?>
+<form action="<?php echo $url; ?>" method="post">
+<div>
+  <input type="hidden" name="id" value="<?php echo (int)$komputer->id; ?>" />
+  <input type="submit" name="delete" value="Tak" class="btn btn-primary"/>
+  <input type="submit" name="delete" value="Nie" class="btn btn-primary"/>
+</div>
+</form>

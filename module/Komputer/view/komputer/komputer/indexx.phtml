@@ -1,0 +1,137 @@
+<?php
+$title = 'Komputery';
+$this->headTitle($title);
+$url_order = 'ASC';
+if ($order_by == 'marka') {
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+} elseif ($order_by == 'model') {
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+}
+?>
+<!-- wyszukiwarka filtrowanie -->
+
+            <div id="szukaj" class="collapse row">
+                <table>
+                    <?php
+                    $form = $this->form;
+                    $form->setAttribute('action', $this->url('komputer', array('action' => 'indexx')));
+                    $form->prepare();
+                    echo $this->form()->openTag($form);
+                    echo $this->formHidden($form->get('id'));
+                    ?>
+                    <div class="col-md-2">
+                        <?php echo $this->formRow($form->get('marka')); ?>
+                    </div><div class="col-md-2">
+                        <?php echo $this->formRow($form->get('model')); ?>
+                    </div><div class="col-md-2">
+                        <?php echo $this->formRow($form->get('dzial_name')); ?>
+                    </div><div class="col-md-2">
+                        <?php echo $this->formRow($form->get('uzytkownik_name')); ?>
+                    </div><div class="col-md-2">
+                        <?php echo $this->formRow($form->get('nr_ewid')); ?>
+                    </div><div class="col-md-2">
+                        <?php echo $this->formRow($form->get('nr_inwent')); ?>
+                    </div><div class="col-md-2">
+                        <?php echo $this->formInput($form->get('submit')); ?>
+                        <?php echo $this->form()->closeTag($form);
+                        ?>
+                </table>
+            </div>
+            <br />
+            <div><span class="glyphicon glyphicon-hdd" style="font-size:1.5em;">&nbsp<?php echo $this->escapeHtml($title); ?>:&nbsp</span>
+                <button class="btn btn-success" data-toggle="collapse" data-target="#szukaj"><span class="glyphicon glyphicon-search">&nbspWyszukaj</span></button>
+            </div>
+<br />
+            <table class="table table-hover">
+                <thead class="thead-inverse">
+                    <tr>
+                        <th><a href="<?php echo $this->url('komputer', array('action' => 'indexx', 'order_by' => 'marka', 'order' => $url_order)); ?>">Marka
+                                <?php if ($order_by == 'marka'): ?><i class="glyphicon glyphicon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a></th>
+                        <th><a href="<?php echo $this->url('komputer', array('action' => 'indexx', 'order_by' => 'model', 'order' => $url_order)); ?>">Model
+                                <?php if ($order_by == 'model'): ?><i class="glyphicon glyphicon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a></th>
+                        <th>Nr ewidencyjny</th>
+                        <th>Nr inwentarzowy</th>
+                        <th>Dział</th>            
+                        <th>Użytkownik</th>
+                        <th>Gwarancja</th>
+                        <th>Szczegóły</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($paginator as $komputer) : ?>
+                        <tr>
+                            <td><?php echo $this->escapeHtml($komputer->marka); ?></td>
+                            <td><?php echo $this->escapeHtml($komputer->model); ?></td>
+                            <td><?php echo $this->escapeHtml($komputer->nr_ewid); ?></td>
+                            <td><?php echo $this->escapeHtml($komputer->nr_inwent); ?></td>
+                            <td><?php echo $this->escapeHtml($komputer->dzial); ?></td>
+                            <td><?php echo $this->escapeHtml($komputer->imie) . " " . $this->escapeHtml($komputer->nazwisko); ?></td>
+
+                            <td><button class="btn btn-success" data-toggle="collapse" data-target="#<?php echo $komputer->id . "dok"; ?>"><span class="glyphicon glyphicon-file">&nbspDokumenty</span></button>
+                            </td>
+                            <td><a class ='btn btn-success' href="<?php echo $this->url('komputer', array('action' => 'detail', 'id' => $komputer->id)); ?>"><span class="glyphicon glyphicon-list">&nbspSzcegóły</span></a>
+                            </td>
+                        </tr>
+                        <?php
+//dokumenty panel   
+                        echo "<tr class='collapse' id='";
+                        echo $komputer->id;
+                        echo "dok'><td colspan='6'>";
+                        echo "<div class='panel panel-default'>";
+                        echo "<div class='panel-body'>";
+                        echo "<table class='table table-hover'><thead class='thead-inverse'><th></th><th>Dokumenty</th><th>Data zakupu</th></thead>";
+                        echo "<tbody>";
+                        //test
+                        echo '<tr><td>' . $pc->marka . '</td></tr>';
+                        echo '<tr><td>Gwarancja:</td><td><a href="';
+                        echo "/Zend/dane/" . str_replace('/', '', $komputer->nr_inwent) . "/gw/" . $komputer->gw;
+                        echo '">';
+                        echo $this->escapeHtml($komputer->gw);
+                        echo '</a></td><td>' . $this->escapeHtml($komputer->data_zakupu) . '</td></tr>';
+                        echo '<tr><td>Faktura:</td><td><a href="';
+                        echo "/Zend/dane/" . str_replace('/', '', $komputer->nr_inwent) . "/fv/" . $komputer->fv;
+                        echo '">';
+                        echo $this->escapeHtml($komputer->fv);
+                        echo '</a></td><td>';
+                        echo $this->escapeHtml($komputer->data_zakupu) . '</td></tr>';
+
+
+                        //}
+//                        endforeach;
+                        echo "</tbody></table>";
+                        echo "</div></div>";
+
+                        echo "</td></tr>";
+                    endforeach;
+                    ?>
+                </tbody>
+            </table>
+
+            <!-- Modal -->
+            <div id="test" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Dane:</h4>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <?php
+            echo $this->paginationControl(
+                    $paginator, 'Sliding', 'paginator-slidex', array('order_by' => $order_by, 'order' => $order)
+            );
+
+
+
+            

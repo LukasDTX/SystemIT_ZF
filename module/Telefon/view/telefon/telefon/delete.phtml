@@ -1,0 +1,27 @@
+<?php
+$title = 'Skasowanie telefonu';
+$this->headTitle($title);
+?>
+<div>
+    <span class="glyphicon glyphicon-phone" style="font-size:2em;">
+        &nbsp<?php echo $this->escapeHtml($title); ?>:&nbsp</span>  
+    <div>&nbsp</div>
+</div>
+
+<p>Czy napewno chcesz usunąć telefon? <br />
+
+  <?php echo $this->escapeHtml($telefon->marka)." "; ?>
+  <?php echo $this->escapeHtml($telefon->model)." "; ?>
+
+    o numerze ewidencyjnym: 
+    <?php echo $this->escapeHtml($telefon->nr_ewid); ?>
+</p>
+<?php 
+$url = $this->url('telefon', array('action' => 'delete', 'id'=>$this->id)); ?>
+<form action="<?php echo $url; ?>" method="post">
+<div>
+  <input type="hidden" name="id" value="<?php echo (int)$telefon->id; ?>" />
+  <input type="submit" name="delete" value="Tak" class="btn btn-primary"/>
+  <input type="submit" name="delete" value="Nie" class="btn btn-primary"/>
+</div>
+</form>

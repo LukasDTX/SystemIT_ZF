@@ -1,0 +1,21 @@
+<?php
+$title = 'Kasowanie telefonu';
+$this->headTitle($title);
+?>
+<h1><?php echo $this->escapeHtml($title); ?></h1>
+
+<p>Czy napewno chcesz usunąć komputer? <br />
+  <?php echo $this->escapeHtml($telefon->marka)." "; ?>
+  <?php echo $this->escapeHtml($telefon->model); ?>
+    <br />o numerze ewidencyjnym: 
+  <?php echo $this->escapeHtml($telefon->nr_ewid); ?>
+</p>
+<?php 
+$url = $this->url('telefon', array('action' => 'delete', 'id'=>$this->id)); ?>
+<form action="<?php echo $url; ?>" method="post">
+<div>
+  <input type="hidden" name="id" value="<?php echo (int)$telefon->id; ?>" />
+  <input type="submit" name="del" value="Tak" class="btn btn-primary"/>
+  <input type="submit" name="del" value="Nie" class="btn btn-primary"/>
+</div>
+</form>

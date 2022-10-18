@@ -1,0 +1,159 @@
+<?php
+$title = 'Działy';
+$this->headTitle($title);
+$url_order = 'ASC';
+if ($order_by == 'imie') {
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+} elseif ($order_by == 'nazwisko') {
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+} elseif ($order_by == 'dzial') {
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+}
+?>
+
+<div id="wyszukaj" class="row">
+    <table>
+        <?php
+        $form = $this->form;
+        $form->setAttribute('class', 'form-vertical');
+        $form->setAttribute('action', $this->url('uzytkownik', array('action' => 'osoba')));
+        $form->prepare();
+
+        echo $this->form()->openTag($form);
+        echo $this->formHidden($form->get('id'));
+        ?>
+        <div class="col-md-2">
+            <?php echo $this->formElement($form->get('uzytkownik_id')); ?>
+        </div><div class="col-md-2">
+            <?php echo $this->formInput($form->get('submit')); ?>
+        </div>
+        <?php echo $this->form()->closeTag($form); ?>
+    </table>
+
+</div>
+
+<h2><span class="label label-warning">&nbsp<?php echo $this->dzial; ?></span></h2>
+<?php
+//****komputer
+
+$pdf = new \ZendPdf\PdfDocument();
+$font = \ZendPdf\Font::fontWithPath('arial.ttf');
+$pdf->pages[] = ($page1 = $pdf->newPage(\ZendPdf\Page::SIZE_A4));
+$page1->setFont($font, 10)
+    ->setFillColor(new \ZendPdf\Color\Html("#f0ad4e"))
+    ->drawRoundedRectangle(10, 830, 100, 800,0, \ZendPdf\Page::SHAPE_DRAW_FILL)
+    ->setFillColor(new \ZendPdf\Color\Html("#5bc0de"))
+    ->drawRectangle(0, 785, 600, 765, \ZendPdf\Page::SHAPE_DRAW_FILL)
+    ->setFillColor(new \ZendPdf\Color\Html("#ffffff"))
+    ->drawText($this->dzial, 20, 810, "UTF-8")
+    ->setLineColor(new \ZendPdf\Color\Html("#5bc0de"))
+    ->setFillColor(new \ZendPdf\Color\Html("#ffffff"))
+    ->drawText("Komputery: ", 10, 770, "UTF-8")
+    ->drawText("Imię Nazwisko: ", 140, 770, "UTF-8")
+    ->drawText("Nr ewid: ", 260, 770, "UTF-8")
+    ->drawText("Nr inwent: ", 320, 770, "UTF-8")
+    ->drawText("s/n: ", 380, 770, "UTF-8")
+    ->drawText("Data Zakupu: ", 520, 770, "UTF-8");
+
+echo "<table class='table table-hover'><thead class='thead-inverse'><th><h3><span class='label label-info'>Komputer</span></h3></th><th>Nazwisko Imię</th><th>sn</th><th>Nr ewidencyjny</th><th>Nr inwentarzowy</th><th>Data zakupu</th></thead>";
+echo "<tbody>";
+$y = 10;
+foreach ($komputer as $pc) :
+    //if ($pc->uzytkownik_id == $uzytkownik->id) {
+    $y = $y + 20;
+    $page1->setFont($font, 10)
+            
+            ->setFillColor(new \ZendPdf\Color\Html("#000000"))
+            ->drawText($pc->marka . " " . $pc->model, 10, 780 - $y, "UTF-8")
+            ->drawText($pc->imie . " " . $pc->nazwisko, 140, 780 - $y, "UTF-8")
+            ->drawText($pc->nr_ewid, 260, 780 - $y, "UTF-8") 
+            ->drawText($pc->nr_inwent, 320, 780 - $y, "UTF-8")
+            ->drawText($pc->sn, 380, 780 - $y, "UTF-8")
+            ->drawText($pc->data_zakupu, 520, 780 - $y, "UTF-8")
+            ->drawLine(10, 775-$y, 590, 775-$y);
+            
+            
+    echo "<tr><td><a href='";
+    echo $this->url('komputer', array('action' => 'detail', 'id' => $pc->id)); ///detail/');
+    //echo $pc->id;
+    echo "'>";
+    echo $pc->marka;
+    echo "  ";
+    echo $pc->model;
+    echo "</a></td>";
+    echo "<td>" . $pc->nazwisko . " " . $pc->imie . "</td>";
+    echo "<td>";
+    echo $pc->sn;
+    echo "</td><td>";
+    echo $pc->nr_ewid;
+    echo "</td><td>";
+    echo $pc->nr_inwent;
+    echo "</td><td>";
+    echo $pc->data_zakupu;
+    echo "</td><td>";
+    echo $pc->dzial;
+    echo "</td></tr>";
+    //   }
+endforeach;
+echo "</tbody></table>";
+?>
+<?php
+//****telefon
+$y = $y + 40;
+$page1->setFont($font, 10)
+        ->setFillColor(new \ZendPdf\Color\Html("#5bc0de"))
+        ->drawRectangle(0, 775-$y, 600, 795-$y, \ZendPdf\Page::SHAPE_DRAW_FILL)
+        ->setLineColor(new \ZendPdf\Color\Html("#5bc0de"))
+        ->setFillColor(new \ZendPdf\Color\Html("#ffffff"))
+        ->drawText("Telefony: ", 10, 780-$y, "UTF-8")
+        ->drawText("Imię Nazwisko: ", 140, 780-$y, "UTF-8")
+        ->drawText("Nr ewid: ", 260, 780-$y, "UTF-8")
+        ->drawText("Nr inwent: ", 320, 780-$y, "UTF-8")
+        ->drawText("s/n: ", 380, 780-$y, "UTF-8")
+        ->drawText("Data Zakupu: ", 520, 780-$y, "UTF-8");
+
+echo "<table class='table table-hover'><thead class='thead-inverse'><th><h3><span class='label label-info'>Telefon</span></h3></th><th>Nazwisko Imię</th><th>sn</th><th>IMEI</th><th>Nr inwentarzowy</th><th>Data zakupu</th></thead>";
+echo "<tbody>";
+foreach ($telefon as $tel) :
+    //if ($pc->uzytkownik_id == $uzytkownik->id) {
+    $y = $y + 20;
+    $page1->setFont($font, 10)
+            
+            ->setFillColor(new \ZendPdf\Color\Html("#000000"))
+            ->drawText($tel->marka . " " . $telc->model, 10, 780 - $y, "UTF-8")
+            ->drawText($tel->imie . " " . $tel->nazwisko, 140, 780 - $y, "UTF-8")
+            ->drawText($tel->nr_ewid, 260, 780 - $y, "UTF-8") 
+            ->drawText($tel->nr_inwent, 320, 780 - $y, "UTF-8")
+            ->drawText($tel->sn, 380, 780 - $y, "UTF-8")
+            ->drawText($tel->data_zakupu, 520, 780 - $y, "UTF-8")
+            ->drawLine(10, 775-$y, 590, 775-$y);
+    echo "<tr><td><a href='";
+    echo $this->url('telefon', array('action' => 'detail', 'id' => $tel->id)); ///detail/');
+    //echo $pc->id;
+    echo "'>";
+    echo $tel->marka;
+    echo "  ";
+    echo $tel->model;
+    echo "</a></td>";
+    echo "<td>" . $tel->nazwisko . " " . $tel->imie . "</td>";
+    echo "<td>";
+    echo $tel->sn;
+    echo "</td><td>";
+    echo $tel->nr_ewid;
+    echo "</td><td>";
+    echo $tel->nr_inwent;
+    echo "</td><td>";
+    echo $tel->data_zakupu;
+    echo "</td><td>";
+    echo $tel->dzial;
+    echo "</td></tr>";
+    //   }
+endforeach;
+echo "</tbody></table>";
+
+$pdf->save("$dzial.pdf");
+//$pdf->
+//        $pdfData = $pdf->render();
+//header("Content-Disposition: inline; filename=wszyscy.pdf"); 
+//header("Content-type: application/x-pdf"); 
+//echo $pdfData;

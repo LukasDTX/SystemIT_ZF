@@ -1,0 +1,96 @@
+<?php
+$title = 'User-Roles';
+$this->headTitle($title);
+$url_order = 'ASC';
+if ($order_by == 'role_name') {
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+} elseif ($order_by == 'resource_name') {
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+}
+?>
+<div id="demo" class="collapse row">
+    <table>
+        <?php
+        $form = $this->form;
+        $form->setAttribute('action', $this->url('admin'));
+        $form->prepare();
+
+        echo $this->form()->openTag($form);
+        echo $this->formHidden($form->get('id'));
+        ?>
+        <div class="col-md-5">
+            <?php echo $this->formRow($form->get('role_id')); ?>
+        </div><div class="col-md-5">
+            <?php echo $this->formRow($form->get('resource_id')); ?>
+        </div>
+        <div class="col-md-5">
+            <?php echo $this->formRow($form->get('permission_id')); ?>
+        </div><div class="col-md-5">
+
+            <?php echo $this->formInput($form->get('submit')); ?>
+            <?php echo $this->form()->closeTag($form);
+            ?>
+    </table>
+</div>
+<br />
+<div><button class="btn btn-success" data-toggle="collapse" data-target="#demo">Wyszukaj</button>
+    <a class ='btn btn-info' href="<?php echo $this->url('admin', array('action' => 'add')); ?>">Dodaj dostęp</a></div>
+<div class="row">
+    <div class='panel panel-default col-md-5 '>
+        <div class='panel-body'>
+            <table class='table table-hover'>
+                <thead class="thead-inverse">
+                    <tr>
+                        <th><a href="<?php echo $this->url('admin', array('order_by' => 'role_name', 'order' => $url_order)); ?>">Role
+                                <?php if ($order_by == 'role_name'): ?><i class="glyphicon glyphicon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a></th>
+
+                        <th><a href="<?php echo $this->url('admin', array('order_by' => 'resource_name', 'order' => $url_order)); ?>">Resource
+                                <?php if ($order_by == 'resource_name'): ?><i class="glyphicon glyphicon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a></th>
+                        <th>Permission</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($paginator as $roleper) : ?>
+                        <tr>
+                            <td><?php echo $this->escapeHtml($roleper->role_name); ?></td>
+                            <td><?php echo $this->escapeHtml($roleper->resource_name); ?></td>
+                            <td><?php echo $this->escapeHtml($roleper->permission_name); ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- drugi div -->
+    <div class='panel panel-default col-md-5 col-md-offset-1'>
+        <div class='panel-body'>
+            <table class='table table-hover'>
+                <thead class="thead-inverse">
+                    <tr>
+                        <th>Role</th>
+                        <th>User</th>
+                        <th>Password</th>
+                </thead>
+                <tbody>
+                    <?php foreach ($u as $user) : ?>
+                        <tr>
+                            <td><?php echo $this->escapeHtml($user->role_name); ?></td>
+                            <td><?php echo $this->escapeHtml($user->email); ?></td>
+                            <td><?php echo $this->escapeHtml($user->password); ?></td>
+                            <td><a class ='btn btn-info' href="<?php echo $this->url('admin', array('action' => 'edit', 'id' => $user->id));
+                            ?>"><span class="glyphicon glyphicon-pencil">&nbspEdytuj</span></a></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<?php
+echo $this->paginationControl(
+        $paginator, 'Sliding', 'paginator-roleper', array('order_by' => $order_by, 'order' => $order)
+);
+
+
+

@@ -1,0 +1,23 @@
+<?php
+$title = 'Skasuj użytkownika';
+$this->headTitle($title);
+?>
+<div>
+    <span class="glyphicon glyphicon-user" style="font-size:2em;">
+        &nbsp<?php echo $this->escapeHtml($title); ?>:&nbsp</span>  
+    <div>&nbsp</div>
+</div>
+
+<p>Czy napewno chcesz usunąć użytkownika? <br />
+  <?php echo $this->escapeHtml($uzytkownik->imie); ?>
+  <?php echo $this->escapeHtml($uzytkownik->nazwisko); ?>
+</p>
+<?php 
+$url = $this->url('uzytkownik', array('action' => 'delete', 'id'=>$this->id)); ?>
+<form action="<?php echo $url; ?>" method="post">
+<div>
+  <input type="hidden" name="id" value="<?php echo (int)$uzytkownik->id; ?>" />
+  <input type="submit" name="del" value="Tak" class="btn btn-primary"/>
+  <input type="submit" name="del" value="Nie" class="btn btn-primary"/>
+</div>
+</form>

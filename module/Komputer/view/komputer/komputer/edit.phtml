@@ -1,0 +1,62 @@
+<?php
+$title = 'Zmiana danych komputera';
+
+$this->headTitle($title);
+?>
+<div>
+    <span class="glyphicon glyphicon-hdd" style="font-size:2em;">
+        &nbsp<?php echo $this->escapeHtml($title); ?>:&nbsp</span>  
+    <div>&nbsp</div>
+</div>
+
+            <?php
+            $form = $this->form;
+            $form->setAttribute('class', 'form-vertical');
+            $form->setAttribute('action', $this->url('komputer', array('action' => 'edit', 'id' => $this->id)));
+            $form->prepare();
+
+            echo $this->form()->openTag($form);
+            echo $this->formHidden($form->get('id'));
+            ?>
+            <div class="row">
+                <div class="form-group col-md-4 col-sm-4">
+                    <?php
+                    echo $this->formlabel($form->get('marka'));
+                    echo $this->formElement($form->get('marka'));
+                    ?>
+                </div>
+                <div class="form-group col-md-4 col-sm-4">
+                    <?php
+                    echo $this->formlabel($form->get('model'));
+                    echo $this->formElement($form->get('model'));
+                    ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4 col-sm-4">
+                    <?php
+                    echo $this->formlabel($form->get('nr_ewid'));
+                    echo $this->formElement($form->get('nr_ewid'));
+                    ?>
+                </div>
+                <div class="form-group col-md-4 col-sm-4">
+                    <?php
+                    echo $this->formlabel($form->get('nr_inwent'));
+                    echo $this->formElement($form->get('nr_inwent'));
+                    ?>
+                </div>
+            </div>
+            <div class="row">
+            <div class="form-group col-md-4 col-sm-4">
+                <?php
+                echo $this->formlabel($form->get('uzytkownik_id'));
+                echo $this->formElement($form->get('uzytkownik_id'));
+                ?>
+            </div></div>
+            <div class="form-group">
+                <?php
+                echo $this->formInput($form->get('submit'));
+                echo "   <a class='btn btn-danger' href='javascript:history.back();'>Wstecz</a>";
+                echo $this->form()->closeTag($form);
+                ?>
+            </div>

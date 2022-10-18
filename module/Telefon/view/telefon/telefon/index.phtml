@@ -1,0 +1,129 @@
+<?php
+$title = 'Telefony';
+$this->headTitle($title);
+$url_order = 'ASC';
+if ($order_by == 'marka') {
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+} elseif ($order_by == 'model') {
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+}
+?>
+            <div id="szukaj" class="collapse row">
+                <table>
+                    <?php
+                    $form = $this->form;
+                    $form->setAttribute('action', $this->url('telefon'));
+                    $form->prepare();
+                    echo $this->form()->openTag($form);
+                    echo $this->formHidden($form->get('id'));
+                    ?>
+                    <div class="col-md-2">
+                        <?php echo $this->formRow($form->get('marka')); ?>
+                    </div><div class="col-md-2">
+                        <?php echo $this->formRow($form->get('model')); ?>
+                    </div><div class="col-md-2">
+                        <?php echo $this->formRow($form->get('dzial_name')); ?>
+                    </div><div class="col-md-2">
+                        <?php echo $this->formRow($form->get('uzytkownik_name')); ?>
+                    </div><div class="col-md-2">
+                        <?php echo $this->formRow($form->get('nr_inwent')); ?>
+                    </div><div class="col-md-2">
+                        <?php echo $this->formRow($form->get('imei')); ?>
+                    </div><div class="col-md-2">
+                        <?php echo $this->formInput($form->get('submit')); ?>
+                        <?php echo $this->form()->closeTag($form);
+                        ?>
+                </table>
+            </div>
+            <!-- lista -->
+            <br />
+            <div><span class="glyphicon glyphicon-phone" style="font-size:1.5em;">&nbsp<?php echo $this->escapeHtml($title); ?>:&nbsp</span>
+                <button class="btn btn-success" data-toggle="collapse" data-target="#szukaj"><span class="glyphicon glyphicon-search">&nbspWyszukaj</span></button>
+            <a class ='btn btn-info' href="<?php echo $this->url('telefon', array('action' => 'add')); ?>"><span class="glyphicon glyphicon-plus-sign">&nbspDodaj nowy telefon</span></a></div>
+    
+<br />
+            <table class="table table-hover">
+                <thead class="thead-inverse">
+                    <tr>
+                        <th><a href="<?php echo $this->url('telefon', array('order_by' => 'marka', 'order' => $url_order)); ?>">Marka
+                                <?php if ($order_by == 'marka'): ?><i class="glyphicon glyphicon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a></th>
+                        <th><a href="<?php echo $this->url('telefon', array('order_by' => 'model', 'order' => $url_order)); ?>">Model
+                                <?php if ($order_by == 'model'): ?><i class="glyphicon glyphicon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a></th>
+                        <th>Nr inwentarzowy</th>
+                        <th>IMEI</th>
+                        <th>Dział</th>            
+                        <th>Użytkownik</th>
+                        <th>&nbsp;&nbsp;&nbsp;&nbsp;Operacje&nbsp;&nbsp;&nbsp;&nbsp;</th>
+
+                        <th>Dokumenty</th>
+                                              <th>Szczegóły</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($paginator as $telefon) : ?>
+                        <tr>
+                            <td><?php echo $this->escapeHtml($telefon->marka); ?></td>
+                            <td><?php echo $this->escapeHtml($telefon->model); ?></td>
+                            <td><?php echo $this->escapeHtml($telefon->nr_inwent); ?></td>
+                            <td><?php echo $this->escapeHtml($telefon->imei); ?></td>
+
+                            <td><?php echo $this->escapeHtml($telefon->dzial); ?></td>
+                            <td><?php echo $this->escapeHtml($telefon->imie) . " " . $this->escapeHtml($telefon->nazwisko); ?></td>
+                            <td>
+                                <a class ='btn btn-info' href="<?php echo $this->url('telefon', array('action' => 'edit', 'id' => $telefon->id));
+                        ?>"><span class="glyphicon glyphicon-pencil">&nbspEdytuj</span></a>
+                                <a class ='btn btn-danger' href="<?php echo $this->url('telefon', array('action' => 'delete', 'id' => $telefon->id));
+                        ?>"><span class="glyphicon glyphicon-remove">&nbspUsuń</span></a>
+                            </td>
+                            <td><button class="btn btn-success" data-toggle="collapse" data-target="#<?php echo $telefon->id . "dok"; ?>"><span class="glyphicon glyphicon-file">&nbspDokumenty</span></button>
+                            </td>
+
+                         
+                            <td><a class ='btn btn-success' href="<?php echo $this->url('telefon', array('action' => 'detail', 'id' => $telefon->id)); ?>"><span class="glyphicon glyphicon-list">&nbspSzcegóły</span></a>
+                            </td>
+                        </tr>
+                        <tr><td colspan="8" id="<?php echo $telefon->id; ?>" class="collapse">
+                                Gwarancja<br />
+                                Faktura<br />
+                            </td></tr>
+
+                        <?php
+//dokumenty panel   
+                        echo "<tr class='collapse' id='";
+                        echo $telefon->id;
+                        echo "dok'><td colspan='6'>";
+                        echo "<div class='panel panel-default'>";
+                        echo "<div class='panel-body'>";
+                        echo "<table class='table table-hover'><thead class='thead-inverse'><th></th><th>Dokumenty</th><th>Data zakupu</th></thead>";
+                        echo "<tbody>";
+                        //test
+                        echo '<tr><td>' . $pc->marka . '</td></tr>';
+                        echo '<tr><td>Gwarancja:</td><td><a href="';
+                        echo "/Zend/dane/" . str_replace('/', '', $telefon->imei) . "/gw/" . $telefon->gw;
+                        echo '">';
+                        echo $this->escapeHtml($telefon->gw);
+                        echo '</a></td><td>' . $this->escapeHtml($telefon->data_zakupu) . '</td></tr>';
+                        echo '<tr><td>Faktura:</td><td><a href="';
+                        echo "/Zend/dane/" . str_replace('/', '', $telefon->imei) . "/fv/" . $telefon->fv;
+                        echo '">';
+                        echo $this->escapeHtml($telefon->fv);
+                        echo '</a></td><td>';
+                        echo $this->escapeHtml($telefon->data_zakupu) . '</td></tr>';
+
+                        echo "</tbody></table>";
+                        echo "</div></div>";
+
+                        echo "</td></tr>";
+                    endforeach;
+                    ?>
+                </tbody>
+            </table>
+            <!-- paginator -->
+            <?php
+            echo $this->paginationControl(
+                    $paginator, 'Sliding', 'paginator-telefon', array('order_by' => $order_by, 'order' => $order)
+            );
+
+
+
+            

@@ -1,0 +1,154 @@
+<?php
+$title = 'Użytkownicy';
+$this->headTitle($title);
+$url_order = 'ASC';
+if ($order_by == 'imie') {
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+} elseif ($order_by == 'nazwisko') {
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+} elseif ($order_by == 'dzial') {
+    $url_order = $order == 'ASC' ? 'DESC' : 'ASC';
+}
+?>
+
+<div id="wyszukaj" class="collapse row">
+    <table>
+        <?php
+        $form = $this->form;
+        $form->setAttribute('class', 'form-vertical');
+        $form->setAttribute('action', $this->url('uzytkownik', array('action' => 'indexx')));
+        $form->prepare();
+
+        echo $this->form()->openTag($form);
+        echo $this->formHidden($form->get('id'));
+        ?>
+        <div class="col-md-3">
+            <?php echo $this->formRow($form->get('imie')); ?>
+        </div><div class="col-md-3">
+            <?php echo $this->formRow($form->get('nazwisko')); ?>
+        </div><div class="col-md-2">
+            <?php echo $this->formRow($form->get('mail')); ?>
+        </div><div class="col-md-2">
+            <?php echo $this->formRow($form->get('kom')); ?>
+        </div><div class="col-md-2">
+            <?php echo $this->formRow($form->get('dzial_id')); ?>
+        </div><div class="col-md-2">
+            <?php echo $this->formInput($form->get('submit')); ?>
+        </div>
+        <?php echo $this->form()->closeTag($form); ?>
+    </table>
+
+</div>
+<br /> 
+<div><span class="glyphicon glyphicon-user" style="font-size:1.5em;">&nbsp<?php echo $this->escapeHtml($title); ?>:&nbsp</span>
+    <button class="btn btn-success" data-toggle="collapse" data-target="#wyszukaj"><span class="glyphicon glyphicon-search">&nbspWyszukaj</span></button>
+</div>
+<br />
+<table class="table table-hover">
+    <thead class="thead-inverse">
+        <tr>
+            <th>
+                <a href="<?php echo $this->url('uzytkownik', array('action' => 'indexx', 'order_by' => 'imie', 'order' => $url_order)); ?>">Imię <?php if ($order_by == 'imie'): ?><i class="glyphicon glyphicon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a>
+            </th>
+            <th>
+                <a href="<?php echo $this->url('uzytkownik', array('action' => 'indexx', 'order_by' => 'nazwisko', 'order' => $url_order)); ?>">Nazwisko <?php if ($order_by == 'nazwisko'): ?><i class="glyphicon glyphicon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a></th>
+            <th>
+                <a href="<?php echo $this->url('uzytkownik', array('action' => 'indexx', 'order_by' => 'dzial', 'order' => $url_order)); ?>">Dział <?php if ($order_by == 'dzial'): ?><i class="glyphicon glyphicon-chevron-<?php echo $url_order == 'ASC' ? 'down' : 'up' ?>"></i><?php endif; ?></a></th>
+            <th>Email</th>
+            <th>Telefon</th>
+
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($paginator as $uzytkownik) : ?>
+            <tr>
+                <td><?php echo $this->escapeHtml($uzytkownik->imie); ?></td>
+                <td><?php echo $this->escapeHtml($uzytkownik->nazwisko); ?></td>
+                <td><?php echo $this->escapeHtml($uzytkownik->dzial); ?></td>
+                <td><?php echo $this->escapeHtml($uzytkownik->mail); ?></td>
+                <td><?php echo $this->escapeHtml($uzytkownik->kom); ?></td>
+
+                <td><button class="btn btn-success" data-toggle="collapse" data-target="#<?php echo $uzytkownik->id; ?>komp"><span class="glyphicon glyphicon-hdd">&nbspKomputery</span></button></td>
+                <td><button class="btn btn-success" data-toggle="collapse" data-target="#<?php echo $uzytkownik->id; ?>tel"><span class="glyphicon glyphicon-phone">&nbspTelefony</span></button></td>
+            </tr>
+            <?php
+//Komputery panel
+            echo "<tr class='collapse' id='";
+            echo $uzytkownik->id;
+            echo "komp'><td colspan='7'>";
+            echo "<div class='panel panel-default'>";
+            echo "<div class='panel-body'>";
+            echo "<table class='table table-hover'><thead class='thead-inverse'><th>Komputer</th><th>Nr ewidencyjny</th><th>Nr inwentarzowy</th><th>S/N</th><th>Data zakupu</th></thead>";
+            echo "<tbody>";
+            foreach ($komputer as $pc) :
+                if ($pc->uzytkownik_id == $uzytkownik->id) {
+
+                    echo "<tr><td><a href='";
+                    echo $this->url('komputer', array('action' => 'detail', 'id' => $pc->id)); ///detail/');
+                    //echo $pc->id;
+                    echo "'>";
+                    echo $pc->marka;
+                    echo "  ";
+                    echo $pc->model;
+                    echo "</a></td><td>";
+                    echo $pc->nr_ewid;
+                    echo "</td><td>";
+                    echo $pc->nr_inwent;
+                    echo "</td><td>";
+                    echo $pc->sn;
+                    echo "</td><td>";
+                    echo $pc->data_zakupu;
+                    echo "</td></tr>";
+                }
+            endforeach;
+            echo "</tbody></table>";
+            echo "</div></div>";
+
+            echo "</td></tr>";
+//Telefony panel **********************************************************
+            echo "<tr class='collapse' id='";
+            echo $uzytkownik->id;
+            echo "tel'><td colspan='7'>";
+            echo "<div class='panel panel-default'>";
+            echo "<div class='panel-body'>";
+            echo "<table class='table table-hover'><thead class='thead-inverse'><th>Telefon</th><th>Nr ewidencyjny</th><th>S/N</th><th>IMEI</th><th>Data zakupu</th></thead>";
+            echo "<tbody>";
+            foreach ($telefon as $tel) :
+                //\Zend\Debug\Debug::dump($pc);die();
+                if ($tel->uzytkownik_id == $uzytkownik->id) {
+
+                    echo "<tr><td><a href='";
+                    echo $this->url('telefon', array('action' => 'detail', 'id' => $tel->id)); ///detail/');
+                    //echo $pc->id;
+                    echo "'>";
+                    echo $tel->marka;
+                    echo "  ";
+                    echo $tel->model;
+                    echo "</a></td><td>";
+                    echo $tel->nr_ewid;
+                    echo "</td><td>";
+                    echo $tel->sn;
+                    echo "</td><td>";
+                    echo $tel->imei;
+                    echo "</td><td>";
+                    echo $tel->data_zakupu;
+                    echo "</td></tr>";
+                }
+            endforeach;
+            echo "</tbody></table>";
+            echo "</div></div>";
+
+            echo "</td></tr>";
+            //koniec
+        endforeach;
+        ?>
+    </tbody>
+</table>
+
+<?php
+echo $this->paginationControl(
+        $paginator, 'Sliding', 'paginator-uzytkownikx', array('order_by' => $order_by, 'order' => $order)
+);
+
